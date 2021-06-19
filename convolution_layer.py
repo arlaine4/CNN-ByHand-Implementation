@@ -21,7 +21,7 @@ def init_conv_layer(image, filtre, stride=0, padding=0, dimension=2):
 
 def generate_matricies(options):
     if not options.dimension or options.dimension == 2:
-        if options.image > 0 and option.filter > 0:
+        if options.image > 0 and options.filter > 0:
             base_matrix = np.zeros((options.image, options.image))
             filter_matrix = np.zeros((options.filter, options.filter))
         else:
