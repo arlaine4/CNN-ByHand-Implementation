@@ -4,19 +4,29 @@ import random
 import sys
 
 class Options:
-    def __init__(self, stride, padding, dimension, image, filtre):
+    def __init__(self, stride, padding, dimension, image, filtre, true_image=None):
         self.stride = stride
         self.padding = padding
         self.dimension = dimension
-        self.image = image
+        if true_image is None:
+            self.image = image
+        else:
+            self.image = true_image.shape[0]
         self.filter = filtre
 
-def init_conv_layer(image, filtre, stride=0, padding=0, dimension=2):
-    options = Options(stride, padding, dimension, image, filtre)
-    image_matrix, filter_matrix = generate_matricies(options)
-    print("\nGenerated image : \n\n", image_matrix)
-    print("\nGenerated filter : \n\n", filter_matrix)
-    result_matrix = convolution(image_matrix, filter_matrix, options)
+def init_conv_layer(image, filtre, stride=0, padding=0, dimension=2, true_image=None):
+    if true_image is None:
+        options = Options(stride, padding, dimension, image, filtre)
+        image_matrix, filter_matrix = generate_matricies(options)
+        print("\nGenerated image : \n\n", image_matrix)
+        print("\nGenerated filter : \n\n", filter_matrix)
+        result_matrix = convolution(image_matrix, filter_matrix, options)
+    else:
+        options = Options(stride, padding, dimension, image, filtre, true_image)
+        _, filter_matrix = generate_matricies(options)
+        print("\nImage : \n\n", true_image)
+        print("\nGenerated filter : \n\n", filter_matrix)
+        result_matrix = convolution(true_image, filter_matrix, options)
     return result_matrix
 
 def generate_matricies(options):
@@ -79,7 +89,6 @@ def convolution(image, filtre, options):
     for i in range(result_dim):
         for j in range(result_dim):
             result_matrix[i][j] = proceed_sum_matrix(i, j, options.stride, image, filtre)
-    print("\nResult matrix : \n\n", result_matrix)
     return result_matrix
 
 def proceed_sum_matrix(y, x, stride, image, filtre):
